@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from .forms import NewsForm
 from. models import newsDetails
+from django.contrib import auth
+from django.views.generic import View
 
 # Create your views here.
 def news_list(request):

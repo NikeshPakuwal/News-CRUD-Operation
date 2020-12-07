@@ -15,5 +15,7 @@ class NewsForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(NewsForm, self).__init__(*args, **kwargs)
+        self.fields['newsCategory'].empty_label = "Select"
         self.fields['newsChannel'].required = False
+
         
