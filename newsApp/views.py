@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 @login_required(login_url='login')
 def news_list(request):
     context = {'news_list' : newsDetails.objects.all()}
-    return render(request, "newsApp/news_list.html", context)
+    return render(request, "admin/news_list.html", context)
 
 @login_required(login_url='login')
 def news_form(request, id = 0):
@@ -22,7 +22,7 @@ def news_form(request, id = 0):
         else: 
             newsDetail = newsDetails.objects.get(pk = id)
             form = NewsForm(instance = newsDetail)
-        return render(request, "newsApp/news_form.html", {'form': form})
+        return render(request, "admin/news_form.html", {'form': form})
     else:
         if id == 0:
             form = NewsForm(request.POST)
@@ -38,7 +38,7 @@ def news_delete(request, pk):
     if request.method == "POST":
         newsDelete.delete()
         return redirect('/news/list')
-    return render(request,'newsApp/delete.html') 
+    return render(request,'admin/delete.html') 
     
 def loginPage(request):
     if request.method == 'POST':
@@ -51,7 +51,7 @@ def loginPage(request):
             login(request, user)
             return redirect('/news')
 
-    return render(request, 'newsApp/login.html')
+    return render(request, 'authenticate/login.html')
 
 @login_required(login_url='login')
 def news_category(request, id = 0):
@@ -61,7 +61,7 @@ def news_category(request, id = 0):
         else: 
             Category = Category.objects.get(pk = id)
             cat = NewsCat(instance = Category)
-        return render(request, "newsApp/category.html", {'cat': cat})
+        return render(request, "admin/category.html", {'cat': cat})
     else:
         if id == 0:
             cat = NewsCat(request.POST)
@@ -74,5 +74,5 @@ def news_category(request, id = 0):
 
 def news_category_display(request):
     context = {'news_category_display' : Category.objects.all()}
-    return render(request, "newsApp/category.html", context)
+    return render(request, "admin/category.html", context)
     

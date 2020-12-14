@@ -25,7 +25,7 @@ SECRET_KEY = '!$xw3o8aguj@jra5a!wy@v5j7*%4m_&f6ss@h1ix-czha5yt94'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','104.131.167.191']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -38,8 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'newsApp',
-    'crispy_forms',
-    'ckeditor',
+    'crispy_forms'
 ]
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
