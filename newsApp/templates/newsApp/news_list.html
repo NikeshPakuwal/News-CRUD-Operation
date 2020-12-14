@@ -22,17 +22,17 @@
         <tr>
             <td>{{ newsDetails.newsTitle }}</td>
             <td>{{ newsDetails.newsCategory }}</td>
-            <td>{{ newsDetails.newsDescription }}</td>
+            <td>{{ newsDetails.newsDescription | safe}}</td>
             <td>{{ newsDetails.newsChannel }}</td>
             <td>
                 <a href="{% url 'news_update' newsDetails.id %}" class="btn text-secondary px-0">
                     <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
                 </a>
-                <form action="{% url 'news_delete' newsDetails.id %}" method="POST" class="d-inline">
+                <form action="" method="POST" class="d-inline">
                     {% csrf_token %}
-                    <button type="submit" class="btn">
-                        <i class="fa fa-trash-o fa-lg text-danger float-right" aria-hidden="true"></i>
-                    </button>
+                    <a class="btn" href="{% url 'news_delete' newsDetails.id %}">
+                        <i class="fa fa-trash-o fa-lg text-danger float-right" aria-hidden="true" ></i>
+                    </a>
                 </form>
             </td>
         </tr>

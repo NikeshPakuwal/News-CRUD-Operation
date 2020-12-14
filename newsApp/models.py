@@ -1,4 +1,5 @@
 from django.db import models
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 
@@ -11,5 +12,6 @@ class Category(models.Model):
 class newsDetails(models.Model):
     newsTitle = models.CharField(max_length=100)
     newsCategory = models.ForeignKey(Category, on_delete=models.CASCADE)
-    newsDescription = models.TextField()
+    newsDescription = RichTextField(blank=True, null=True)
     newsChannel = models.CharField(max_length=50)
+    
