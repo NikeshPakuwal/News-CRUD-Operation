@@ -1,0 +1,83 @@
+{% extends "newsApp/base.html" %}
+
+{% block content %}
+  
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">News Category List</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <div id="jsGrid1">
+            <table class="table table-boderless">
+                <thead class="border-bottom font-weight-bold">
+                    <tr>
+                        <td>Title</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for Category in news_category_list %}
+            
+                    <tr>
+                        <td>{{ Category.title }}</td>
+                        <td>
+                            <a href="{% url 'news_category_update' Category.id %}" class="btn btn-dark">
+                                <i class="fa fa-pen" aria-hidden="true"></i>
+                            </a>
+                          
+                                <button class="btn btn-danger btn-Delete" cid="{{Category.id}} ">
+                                    <i class="fa fa-trash float-right" aria-hidden="true"></i>
+                                </button>
+                           
+                        </td>
+                    </tr>
+            
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    $('.btn-Delete').click(function(){
+      var id = $(this).attr("cid");
+      swal({
+  title: "Are you sure?",
+  text: "Once deleted, you will not be able to recover this imaginary file!",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    $.ajax({
+        type: "POST",
+        url: "{% url 'news_category_delete' %}",
+        data: {'id':id,csrfmiddlewaretoken:"{{ csrf_token }}"}, 
+        success: function(data)
+        {
+            swal("Poof! Your imaginary file has been deleted!", {
+                icon: "success",
+            }).then(function(){
+                window.location.reload();
+            }); 
+            
+        },
+        error: function(data)
+        {        
+            swal("Oh no!", "Server Error", "error");  
+            swal.stopLoading();
+            swal.close();                                                       
+        }
+    });
+  }
+});
+    });
+  </script>
+
+{% endblock scripts %}

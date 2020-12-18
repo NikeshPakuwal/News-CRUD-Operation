@@ -1,3 +1,4 @@
+import os
 """
 Django settings for newsReport project.
 
@@ -38,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'newsApp',
-    'crispy_forms'
+    'crispy_forms',
+    'ckeditor',
+    'sweetify',
 ]
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
@@ -126,3 +129,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+
+SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
