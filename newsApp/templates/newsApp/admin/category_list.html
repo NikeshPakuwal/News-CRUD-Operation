@@ -1,5 +1,7 @@
 {% extends "newsApp/base.html" %}
 
+{% block title %}Category List{% endblock %}
+
 {% block content %}
   
 <div class="card">
@@ -48,7 +50,7 @@
       var id = $(this).attr("cid");
       swal({
   title: "Are you sure?",
-  text: "Once deleted, you will not be able to recover this imaginary file!",
+  text: "Once deleted, you will not be able to recover this file!",
   icon: "warning",
   buttons: true,
   dangerMode: true,
@@ -61,7 +63,7 @@
         data: {'id':id,csrfmiddlewaretoken:"{{ csrf_token }}"}, 
         success: function(data)
         {
-            swal("Poof! Your imaginary file has been deleted!", {
+            swal("Your  file has been deleted!", {
                 icon: "success",
             }).then(function(){
                 window.location.reload();

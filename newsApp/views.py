@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect
-from .forms import NewsForm
-from .forms import NewsCat
-from. models import newsDetails
-from .models import Category
+from .forms import NewsCat, NewsForm, ScrapperForm
+from. models import newsDetails, Category, todoList, webScraping
 from django.contrib import auth
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.utils import timezone
+from urllib.request import urlopen as uReq
+from bs4 import BeautifulSoup  
 
 # Create your views here.
 def home(request):
@@ -48,8 +49,7 @@ def news_delete(request):
     news = newsDetails.objects.get(pk = id)
     news.delete()
     return JsonResponse({'success' : 'true'});
-         
-    
+           
 def loginPage(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -73,6 +73,7 @@ def news_category(request, id = 0):
             cat = NewsCat(instance = category)
         return render(request, "newsApp/admin/category.html", {'cat': cat})
     else:
+        
         if id == 0:
             cat = NewsCat(request.POST)
         else:
@@ -92,4 +93,71 @@ def news_category_delete(request):
     id = request.POST.get('id')
     category = Category.objects.get(pk = id)
     category.delete()
-    return JsonResponse({'success' : 'true'});
+    return JsonResponse({'success' : 'true'})
+
+def todo(request):
+    content = {'todo' : todoList.objects.all()}
+    return render(request, "newsApp/ToDo/toDO.html", content)
+
+def submitTodo(request):
+    if request.method == 'POST':
+        title = request.POST['title']
+        data = todoList.objects.create(
+            title = title
+        )
+    return JsonResponse({'succes':'true','title':title,'created_at':data.created_at.strftime
+    ('%b. %d, %Y, %H:%M %p.').replace('AM', 'a.m').replace('PM', 'p.m')})
+
+def todoCheck(request):
+    id = request.POST.get('id')
+    todo = todoList.objects.get(pk = id)
+    if(todo.status == True):
+        todo.status = False
+    else:
+        todo.status = True
+    todo.save()
+    return JsonResponse({'success' : 'true','id':id})
+
+def TodoSumbit(request):
+    id = request.POST.get('id')
+    title = request.POST.get('title')
+    todo = todoList.objects.get(pk=id)
+    todo.title = title
+    todo.save()
+    return JsonResponse({'success' : 'true','id':id,'title':title})
+
+@login_required(login_url='login')
+def scraping(request):
+    if request.method == 'POST':
+        url = request.POST.get('url')
+        array = url.split(',')
+        for i in array:
+            page = uReq(url)
+            page_html = page.read()
+            page.close()
+
+            soup = BeautifulSoup(page_html, 'html.parser')
+
+            if soup.h1 and soup.p:
+                title = soup.h1.string
+                content = soup.p.string
+                messages.success(request, 'Process Suceessful!')
+
+            data = webScraping.objects.create(
+                title = title,
+                content = content,
+                url = url
+            )
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    else:
+        context = {}
+        form = ScrapperForm(request.POST or None)
+        context['form'] = form
+        context = {'list' : webScraping.objects.all()}
+        return render(request, 'newsApp/Scraping/scraping.html',context)
+
+def deleteScraping(request):
+    id = request.POST.get('id')
+    scrap = webScraping.objects.get(pk = id)
+    scrap.delete()
+    return JsonResponse({'success' : 'true'})

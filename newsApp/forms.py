@@ -1,6 +1,5 @@
 from django import forms
-from .models import newsDetails
-from .models import Category
+from .models import newsDetails, Category, todoList, webScraping, Semrush
 
 class NewsForm(forms.ModelForm):
 
@@ -19,7 +18,6 @@ class NewsForm(forms.ModelForm):
         self.fields['newsCategory'].empty_label = "Select"
         self.fields['newsChannel'].required = False
 
-
 class NewsCat(forms.ModelForm):
 
     class Meta:
@@ -30,4 +28,16 @@ class NewsCat(forms.ModelForm):
             'title' : 'News Category Title'
         }
     
-    
+class listForm(forms.ModelForm):
+
+    class Meta:
+        model = todoList
+        fields = ('title',)
+
+class ScrapperForm(forms.ModelForm):
+    class Meta:
+        model = webScraping
+        fields = ['url']
+        widgets = {
+            'url' : forms.TextInput(attrs={'class':'form-control'}),
+        }
