@@ -5,8 +5,10 @@ from django.views.generic import View
 import io, csv
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from .models import Employee, Semrush
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+
 from ajax_datatable.views import AjaxDatatableView
-from django.contrib.auth.models import Permission
+# from django.contrib.auth.models import Permission
 
 class semrush(View):
     def get(self, request):
@@ -45,6 +47,15 @@ class semrush(View):
             returnmsg = {"status_code": 500}
         return JsonResponse(returnmsg)
 
+class SemrushList(ListView):
+    model = Semrush
+    template_name = 'newsApp/Semrush/semrush_list.html'
+    ordering = ['-id']
+    login_url = '/admin/login/'
+    def get_context_data(self, **kwargs):
+        context = super(SemrushList, self).get_context_data(**kwargs)
+
+
 class PermissionAjaxDatatableView(AjaxDatatableView):
     model = Semrush
     title = 'SemrushData'
@@ -53,10 +64,8 @@ class PermissionAjaxDatatableView(AjaxDatatableView):
         AjaxDatatableView.render_row_tools_column_def(),
         {
             'name': 'id',
-            'autofilter': True,
         }, {
             'name': 'country',
-
         },
         {
             'name': 'keyword',
@@ -69,18 +78,6 @@ class PermissionAjaxDatatableView(AjaxDatatableView):
         },
         {
             'name': 'keyword_difficulty',
-        },
-        {
-            'name': 'created_at',
-            'title': 'created_at',
-            'className': 'date_input',
-            'searchable': True,
-            'orderable': True,
-        },
-        {
-            'name': 'action',
-            'searchable': False,
-            'orderable': False
         }
     ]
 

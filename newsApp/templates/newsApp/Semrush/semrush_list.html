@@ -1,4 +1,13 @@
 {% extends 'newsApp/base.html' %}
+{% load static %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+    <link href="{% static 'ajax_datatable/css/style.css' %}" rel="stylesheet" />
+
+{% endblock stylesheet %}
 
 {% block content %}
 
@@ -26,50 +35,39 @@
 </section>
 {% endblock content %}
 
-{% block extrastyle %}
-
-    <link href="{% static 'ajax_datatable/css/style.css' %}" rel="stylesheet" />
-    <!-- link rel='stylesheet' href="{% static 'datatables.net-bs/css/dataTables.bootstrap.min.css' %}" -->
-    <link rel='stylesheet' href="{% static 'datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}">
-    <link rel='stylesheet' href="{% static 'datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}">
-
-{% endblock extrastyle %}
-
-{% block extrajs %}
-
-    <script type="text/javascript" src="{% static 'ajax_datatable/js/utils.js' %}"></script>
-
-    <script src="{% static 'datatables.net/js/jquery.dataTables.min.js' %}"></script>
-    <!-- script src="{% static 'datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script -->
-    <script src="{% static 'datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
-    <script src="{% static 'datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
-    <script src="{% static 'datatables.net-buttons/js/buttons.print.min.js' %}"></script>
-    <script src="{% static 'datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
-    <script src="{% static 'datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
-    <script src="{% static 'jszip/dist/jszip.min.js' %}"></script>
-    <script src="{% static 'pdfmake/build/pdfmake.min.js' %}"></script>
-    <script src="{% static 'pdfmake/build/vfs_fonts.js' %}"></script>
-
-{% endcompress %}
 
 {% block scripts %}
 
+
+    <script type="text/javascript" src="{% static 'ajax_datatable/utils.js' %}"></script>
+
+    <!-- DataTables  & Plugins -->
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %} "></script>
+<script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %} "></script>
+<script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %} "></script>
+<script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %} "></script>
+<script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js' %} "></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %} "></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.1/bootbox.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.js"></script>
+
+
 <script>
-  $(document).ready(function() {
-        AjaxDatatableViewUtils.initialize_table(
-            $('#datatable_permissions'),
-            "{% url 'semrush_data_list' %}",
-            {
-                // extra_options (example)
-                processing: false,
-                autoWidth: false,
-                full_row_select: true,
-                scrollX: false
-            }, {
-                // extra_data
-                // ...
-            },
-        );
+  $(function(){
+
+    DatatablesViewUtils.initialize_table(
+        $('#datatable_permissions'),
+        "{% url 'ajax_datatable_permissions' %}",
+        {
+            // extra_options (example)
+            processing: false,
+            autoWidth: false,
+            full_row_select: false,
+            scrollX: false,
+        },
+    );
+
     });
 </script>
 

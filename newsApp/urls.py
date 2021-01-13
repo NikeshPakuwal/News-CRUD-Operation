@@ -1,9 +1,10 @@
 from django.urls import path, include
 from .import views, semrushviews
 from django.contrib.auth import views as auth_views
-from .semrushviews import Employee1, semrush, PermissionAjaxDatatableView
+from .semrushviews import Employee1, semrush, PermissionAjaxDatatableView, SemrushList
 from django.conf import settings
 from django.conf.urls.static import static
+# from . import semrushviews
 
 
 urlpatterns = [
@@ -25,7 +26,12 @@ urlpatterns = [
     path('todo/check',views.todoCheck, name = 'todo_check'),
     path('scraping/', views.scraping, name = 'scraping'),
     path('scrapingDelete/', views.deleteScraping, name = 'deleteScraping'),
+
     path('semrush/', semrush.as_view(), name = 'semrush_data'),
+
+
+    # 
+    path('semrush/list', SemrushList.as_view(), name="list_semrush"),
     path('ajax_datatable/permissions/', PermissionAjaxDatatableView.as_view(), name="ajax_datatable_permissions"),
     path('postAdd/', Employee1.as_view(), name = 'post_add')
 ]
