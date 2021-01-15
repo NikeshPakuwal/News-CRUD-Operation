@@ -1,0 +1,38 @@
+{% extends 'newsApp/base.html' %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-header">
+        <h4>Serp Data</h4>
+    </div>
+    <div class="card-body">
+        <button type="button" class="btn btn-success checkAll">Check All</button>
+        <ol>
+            {% for link in items %}
+            <li>
+                <input type="checkbox" name="links" value="{{ link }}"> {{ link }} <a href="{{ link }}" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+            </li>
+            {% endfor %}
+        </ol>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+
+<script>
+    
+    $(document).ready(function(){
+        var clicked = false;
+        $(".checkAll").on("click", function() {
+            $('input:checkbox').prop("checked", !clicked);
+            clicked = !clicked;
+            this.innerHTML = clicked ? 'Unchecked All' : 'Check All';
+        });
+    })
+
+</script>
+
+{% endblock scripts %}

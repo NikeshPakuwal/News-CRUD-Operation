@@ -1,16 +1,15 @@
 {% extends 'newsApp/base.html' %}
+
 {% load static %}
 
 {% block stylesheet %}
 <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
 <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
 <link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
-    <link href="{% static 'ajax_datatable/css/style.css' %}" rel="stylesheet" />
-
+<link href="{% static 'ajax_datatable/css/style.css' %}" rel="stylesheet" />
 {% endblock stylesheet %}
 
 {% block content %}
-
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
@@ -18,12 +17,11 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">DataTable with minimal features & hover style</h3>
+              <h3 class="card-title">Semrush DataTable</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="datatable_permissions" class="table table-bordered table-hover">
-                
+              <table id="datatable_permissions" class="table table-bordered">
                 
               </table>
             </div>
@@ -35,27 +33,21 @@
 </section>
 {% endblock content %}
 
-
 {% block scripts %}
-
-
-    <script type="text/javascript" src="{% static 'ajax_datatable/utils.js' %}"></script>
-
-    <!-- DataTables  & Plugins -->
+<script type="text/javascript" src="{% static 'ajax_datatable/utils.js' %}"></script>
+<!-- DataTables  & Plugins -->
 <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %} "></script>
 <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %} "></script>
 <script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %} "></script>
 <script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %} "></script>
 <script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js' %} "></script>
 <script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %} "></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.1/bootbox.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.js"></script>
 
 
 <script>
   $(function(){
-
     DatatablesViewUtils.initialize_table(
         $('#datatable_permissions'),
         "{% url 'ajax_datatable_permissions' %}",
@@ -67,8 +59,7 @@
             scrollX: false,
         },
     );
-
     });
-</script>
 
+</script>
 {% endblock scripts %}

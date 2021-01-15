@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
 from ckeditor.fields import RichTextField
+from django.utils import timezone
 
 # Create your models here.
 
@@ -48,6 +49,8 @@ class Semrush(models.Model):
     trend = models.CharField(max_length=255, blank=True, null=True)
     click_potential = models.CharField(max_length=255, blank=True, null=True)
     competitors = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now())
+    updated_at = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
         return self.country+" "+self.seed_keyword

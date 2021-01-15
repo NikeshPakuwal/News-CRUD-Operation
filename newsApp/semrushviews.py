@@ -1,18 +1,18 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.views.generic import View
+from django.views.generic import View, ListView
 import io, csv
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from .models import Employee, Semrush
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.urls import reverse
 
 from ajax_datatable.views import AjaxDatatableView
 # from django.contrib.auth.models import Permission
 
 class semrush(View):
     def get(self, request):
-        return render(request, 'newsApp/Semrush/semrush_add.html')
+        return render(request, 'newsApp/semrush/semrush_add.html')
     def post(self, request):
         user = request.user
         paramFile = io.TextIOWrapper(request.FILES['semrushData'].file)
@@ -47,11 +47,11 @@ class semrush(View):
             returnmsg = {"status_code": 500}
         return JsonResponse(returnmsg)
 
+
 class SemrushList(ListView):
     model = Semrush
     template_name = 'newsApp/Semrush/semrush_list.html'
     ordering = ['-id']
-    login_url = '/admin/login/'
     def get_context_data(self, **kwargs):
         context = super(SemrushList, self).get_context_data(**kwargs)
 
@@ -78,8 +78,28 @@ class PermissionAjaxDatatableView(AjaxDatatableView):
         },
         {
             'name': 'keyword_difficulty',
+        },
+        {
+            'name': 'created_at',
+            'title': 'created_at',
+            'className': 'date_input',
+            'searchable': True,
+            'orderable': True,
+        },
+        {
+            'name': 'action',
+            'searchable': False,
+            'orderable': False
         }
     ]
+
+    def customize_row(self, row, obj):
+        row['action'] = '<a class="btn btn-link client-status" href="%s">%s</a>'% (
+            # obj.id,
+            reverse('semrush_serp', args=(obj.keyword,obj.pk)),
+            'Get Link'
+        ),
+        return
 
 
 class Employee1(View):
