@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.views.generic import View, ListView
 import io, csv
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -10,9 +11,12 @@ from django.urls import reverse
 from ajax_datatable.views import AjaxDatatableView
 # from django.contrib.auth.models import Permission
 
+
+@method_decorator(login_required(login_url='login'), name="dispatch")
 class semrush(View):
     def get(self, request):
         return render(request, 'newsApp/semrush/semrush_add.html')
+        
     def post(self, request):
         user = request.user
         paramFile = io.TextIOWrapper(request.FILES['semrushData'].file)
@@ -56,6 +60,7 @@ class SemrushList(ListView):
         context = super(SemrushList, self).get_context_data(**kwargs)
 
 
+@method_decorator(login_required(login_url='login'), name="dispatch")
 class PermissionAjaxDatatableView(AjaxDatatableView):
     model = Semrush
     title = 'SemrushData'
@@ -94,7 +99,7 @@ class PermissionAjaxDatatableView(AjaxDatatableView):
     ]
 
     def customize_row(self, row, obj):
-        row['action'] = '<a class="btn btn-link client-status" href="%s">%s</a>'% (
+        row['action'] = '<a class="btn btn-info client-status" href="%s">%s</a>'% (
             # obj.id,
             reverse('semrush_serp', args=(obj.keyword,obj.pk)),
             'Get Link'

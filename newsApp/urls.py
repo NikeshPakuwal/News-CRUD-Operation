@@ -1,10 +1,10 @@
 from django.urls import path, include
 from .import views, semrushviews, serpviews
 from django.contrib.auth import views as auth_views
-from .semrushviews import Employee1, semrush, PermissionAjaxDatatableView, SemrushList 
+from .semrushviews import Employee1, semrush, PermissionAjaxDatatableView, SemrushList
 from django.conf import settings
 from django.conf.urls.static import static
-from .serpviews import SemrushCallSerp
+from .serpviews import SemrushCallSerp, AjaxDatatableSerpDataList, SerpDataList, GoogleLinkUpload
 
 
 urlpatterns = [
@@ -34,11 +34,15 @@ urlpatterns = [
     path('scrapingDelete/', views.deleteScraping, name = 'deleteScraping'),
     
     #semrush data 
-    path('semrush/', semrush.as_view(), name = 'semrush_data'),
-    path('semrush/list', SemrushList.as_view(), name="list_semrush"),
+    path('Semrush/', semrush.as_view(), name = 'semrush_data'),
+    path('Semrush/list', SemrushList.as_view(), name="list_semrush"),
     path('ajax_datatable/permissions/', PermissionAjaxDatatableView.as_view(), name="ajax_datatable_permissions"),
     path('postAdd/', Employee1.as_view(), name = 'post_add'),
 
     #serp
-    path('serp/<str:keyword>/<int:pk>', SemrushCallSerp.as_view(), name="semrush_serp")
+    path('serp/<str:keyword>/<int:pk>', SemrushCallSerp.as_view(), name="semrush_serp"),
+    path('serp/view', SerpDataList.as_view(), name="list_serpview"),
+    path('serp/list', AjaxDatatableSerpDataList.as_view(), name="datatable_serpdata"),
+
+    path('serp/uploadLink', GoogleLinkUpload.as_view(), name = 'googleLinkUpload')
 ]

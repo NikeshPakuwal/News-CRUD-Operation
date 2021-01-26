@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.utils import timezone
-from urllib.request import urlopen as uReq
+from urllib.request import Request, urlopen as uReq
 from bs4 import BeautifulSoup  
 
 # Create your views here.
