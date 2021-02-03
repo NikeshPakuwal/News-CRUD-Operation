@@ -95,6 +95,7 @@ def news_category_delete(request):
     category.delete()
     return JsonResponse({'success' : 'true'})
 
+@login_required(login_url='login')
 def todo(request):
     content = {'todo' : todoList.objects.all()}
     return render(request, "newsApp/ToDo/toDO.html", content)

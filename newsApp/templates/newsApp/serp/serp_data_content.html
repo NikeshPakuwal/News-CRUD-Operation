@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %}Semrush Data List{% endblock %}
+{% block title %}Serp Content Detail{% endblock %}
 
 {% block stylesheet %}
 <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
@@ -19,7 +19,7 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Semrush DataTable</h3>
+              <h3 class="card-title">Serp Content Detail</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -52,7 +52,7 @@
   $(function(){
     DatatablesViewUtils.initialize_table(
         $('#datatable_permissions'),
-        "{% url 'ajax_datatable_permissions' %}",
+        "{% url 'serp_content_detail' %}",
         {
             // extra_options (example)
             processing: false,

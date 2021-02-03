@@ -69,7 +69,8 @@ class PermissionAjaxDatatableView(AjaxDatatableView):
         AjaxDatatableView.render_row_tools_column_def(),
         {
             'name': 'id',
-        }, {
+        },
+        {
             'name': 'country',
         },
         {

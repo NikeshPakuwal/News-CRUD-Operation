@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% block title %}Serp Data List{% endblock %}
+
 {% block css %}
 
 <!-- DataTables -->
@@ -63,21 +65,35 @@
             },
         );
         
-        
-        $('.bulk_upload').on('click' ,function(event) {
+        $('.bulk_upload').on('click', function(event){
             var obj = [];
-            $(".checklist").each(function() {
-                if ($(this).is(":checked")) {
+
+            $(".checklist").each(function(){
+                if($(this).is(":checked")){
                     obj.push($(this).attr("data-cid"));
                 }
             });
-            alert(obj)
+
+            //alert(obj)
+            
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'serpdata_crawl_ajax' %}",
+                data : {
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                    id: obj
+                },
+                success: function (data) {
+                    console.log(data)
+                },
+            });
+ 
         });
 
 
     });
     
-  
+
 </script>
 
 {% endblock %}

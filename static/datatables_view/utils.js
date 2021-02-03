@@ -470,7 +470,7 @@ window.DatatablesViewUtils = (function() {
             $('input:checkbox').prop("checked", !clicked);
 
             clicked = !clicked;
-            this.innerHTML = clicked ? 'Unchecked All' : 'Check All';
+            this.innerHTML = clicked ? 'Uncheck All' : 'Check All';
         });
     }
 

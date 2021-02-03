@@ -4,7 +4,8 @@ from django.contrib.auth import views as auth_views
 from .semrushviews import Employee1, semrush, PermissionAjaxDatatableView, SemrushList
 from django.conf import settings
 from django.conf.urls.static import static
-from .serpviews import SemrushCallSerp, AjaxDatatableSerpDataList, SerpDataList, GoogleLinkUpload
+from .serpviews import SemrushCallSerp, AjaxDatatableSerpDataList, SerpDataList, SerpDataContent
+from .serpviews import GoogleLinkUpload, AjaxLoadContent, AjaxDatatableSerpContentDetail
 
 
 urlpatterns = [
@@ -44,5 +45,10 @@ urlpatterns = [
     path('serp/view', SerpDataList.as_view(), name="list_serpview"),
     path('serp/list', AjaxDatatableSerpDataList.as_view(), name="datatable_serpdata"),
 
-    path('serp/uploadLink', GoogleLinkUpload.as_view(), name = 'googleLinkUpload')
+    path('serp/uploadLink', GoogleLinkUpload.as_view(), name = 'googleLinkUpload'),
+
+    path('serp/crawl_ajax', AjaxLoadContent.as_view(), name="serpdata_crawl_ajax"),
+
+    path('serp/contentDetail', AjaxDatatableSerpContentDetail.as_view(), name="serp_content_detail"),
+    path('serp/dataContent', SerpDataContent.as_view(), name="serp_data_content")
 ]

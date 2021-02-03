@@ -80,3 +80,10 @@ class Employee(models.Model):
     def __str__(self):
         return self.first_name+" "+self.last_name
 
+
+class SerpContentDetail(models.Model):
+    serp_link = models.ForeignKey(SerpDataLink, on_delete=models.CASCADE, related_name='serp_data_link', null=True)
+    keyword = models.ForeignKey(Semrush, on_delete=models.CASCADE, related_name='serp_semrush_link', null=True)
+    title = models.TextField()
+    content = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now())
