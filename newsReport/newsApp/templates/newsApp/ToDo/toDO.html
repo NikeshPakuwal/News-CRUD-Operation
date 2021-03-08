@@ -1,0 +1,191 @@
+{% extends "newsApp/base.html" %}
+
+{% load static %}
+
+{% block title %}To do list{% endblock %}
+
+{% block content %}
+
+    <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="ion ion-clipboard mr-1"></i>
+            To Do List
+          </h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+          <ul class="todo-list" id="todo-body" data-widget="todo-list">
+            {% for todoList in todo %}
+            <li>
+              <!-- drag handle -->
+              <span class="handle">
+                <i class="fas fa-ellipsis-v"></i>
+                <i class="fas fa-ellipsis-v"></i>
+              </span>
+              <!-- checkbox -->
+              <div  class="icheck-primary d-inline ml-2">
+                <input id="list-{{todoList.id}}" type="checkbox" {% if todoList.status == 1 %} 
+                checked {% endif %} value="" name="todo1" class="tick-box" test ='{{ todoList.id }}' id="todoCheck1">
+                <label for="todoCheck1"></label>
+              </div>
+              <!-- todo text -->
+              <span class="text">{{ todoList.title }}</span>
+              <!-- Emphasis label -->
+              <small class="badge badge-danger"><i class="far fa-clock"></i> {{ todoList.created_at }} </small>
+              <!-- General tools such as edit or delete-->
+              <div class="tools">
+                <a href="javascript:;" attTitle="{{todoList.title}}" data-toggle="modal" data-target=
+                "#to-do-modal" class="edit-modal"><i class="fas fa-edit"></i></a>              
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer clearfix">
+          <button type="button" data-target="#to-do-modal" data-toggle="modal" id="add_button" class="btn btn-info 
+          float-right"><i class="fas fa-plus"></i> Add Item</button>
+        </div>
+    </div>
+
+    <div class="modal fade" id="to-do-modal" tabindex="-1" role="dialog" aria-labelledby=
+    "exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add to To-do list</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <form id="todo-form">
+            {%csrf_token %}
+            <div class="modal-body">
+              <lable for="title">Title</lable>
+              <input type="text" value="" class="form-control" name="title" id="form_title"/>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" id="update_btn">Update</button>
+              <button type="submit" class="btn btn-primary" id="save_btn">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+{% endblock content %}
+
+{% block scripts %}
+
+<script>
+
+  $(document).on('submit', '#todo-form', function(e){
+    e.preventDefault();
+    $.ajax({
+      type: 'POST',
+      url: "{% url 'submit_todo' %}",
+      data: {
+        title: $('#form_title').val(),
+        csrfmiddlewaretoken:"{{ csrf_token }}"
+      },
+      success: function(data)
+        {
+          var title = data.title;
+          $('#todo-form').trigger('reset');
+          $('#to-do-modal').modal('toggle');
+          $('#todo-body').prepend(
+            `  <li>
+              <!-- drag handle -->
+              <span class="handle">
+                <i class="fas fa-ellipsis-v"></i>
+                <i class="fas fa-ellipsis-v"></i>
+              </span>
+              <!-- checkbox -->
+              <div  class="icheck-primary d-inline ml-2">
+                <input type="checkbox" value="" name="todo1" id="todoCheck1">
+                <label for="todoCheck1"></label>
+              </div>
+              <!-- todo text -->
+              <span class="text">`+data.title+`</span>
+              <!-- Emphasis label -->
+              <small class="badge badge-danger"><i class="far fa-clock"></i> `+data.created_at+` </small>
+              <!-- General tools such as edit or delete-->
+              <div class="tools">
+                <a href="javascript:;" attTitle="`+data.title+`" data-toggle="modal" data-target=
+                "#to-do-modal" class="edit-modal" cid="`+data.id+`"><i class="fas fa-edit"></i></a>
+                <i class="fas fa-trash-o"></i>
+              </div>
+            </li>`
+          )
+        },
+        error: function(data)
+        {        
+          alert('Error rendering...');
+        }   
+    });
+
+  });
+
+  $('.tick-box').click(function(){
+    var id = $(this).attr("test");
+    $.ajax({
+        type: "POST",
+        url: "{% url 'todo_check' %}",
+        data: {'id':id, csrfmiddlewaretoken:"{{ csrf_token }}"}, 
+        success: function(data)
+        {
+          $('#list-'+data.id).attr("checked");
+        },
+        error: function(data)
+        {        
+            swal("Oh no!", "Server Error", "error");  
+            swal.stopLoading();
+            swal.close();                                                       
+        }
+    });
+  });
+
+  $('.edit-modal').click(function(){
+      var title = $(this).attr('attTitle');
+      $('#update_btn').removeAttr("hidden");
+      $('#save_btn').attr("hidden","true");
+      $("#form_title").val(title);
+    });
+
+    $('#add_button').click(function(){
+      $('#update_btn').attr("hidden",'true');
+      $('#save_btn').removeAttr("hidden");
+    });
+
+
+  var update_btn = document.getElementById("update_btn");
+  update_btn.addEventListener('click', function(event){
+    Updateform('#todo-form');
+  });
+  function updateform(id){
+    var data = $('#'+id).serialize();
+    alert(data);
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'todo_check' %}",
+        data: data,
+        success: function(data) {
+            $('#id').html(data);
+        },
+        error: function(data) {
+            alert("Error occured, please try again");
+        },
+    });
+  };
+
+</script>
+
+{% endblock scripts %}

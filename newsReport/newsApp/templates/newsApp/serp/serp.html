@@ -1,0 +1,75 @@
+{% extends 'newsApp/base.html' %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-header">
+        <h4>Serp Data</h4>
+    </div>
+    
+    <div class="card-body">
+        <button type="button" class="btn btn-success checkAll">Check All</button>
+
+        <form action="{% url 'googleLinkUpload' %}" method="POST">
+            {% csrf_token %}
+            <ol>
+                {% for link in items %}
+                <li>
+                    <input type="checkbox" name="links" cid="{{ link }}" class="checklist" onclick="Enableddl(this)" value="{{ link }}"> {{ link }} <a href="{{ link }}" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                </li>
+                {% endfor %}
+                <input type="hidden" name="keyword_id" value="{{ id }}">
+                <button type="submit" class="btn btn-primary" id="DDL" disabled="disabled" style="float: right;">Scrap Data</button>
+            </ol>
+        </form>
+        
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+
+<script>
+    
+    $(document).ready(function(){
+        var clicked = false;
+        $(".checkAll").on("click", function() {
+            $('input:checkbox').prop("checked", !clicked);
+            clicked = !clicked;
+            var ddl = document.getElementById("DDL")
+            ddl.disabled = clicked ? false : true;
+            if(!ddl.disabled){
+                ddl.focus();
+            }
+            this.innerHTML = clicked ? 'Uncheck All' : 'Check All';
+        });
+    })
+    
+    function Enableddl(chkddl){
+        var ddl = document.getElementById("DDL")
+        ddl.disabled = chkddl.checked ? false : true;
+        if(!ddl.disabled){
+            ddl.focus();
+        }
+    }
+
+    // $('#DDL').on('click' ,function(event) {
+    //     var obj = [];
+    //     $(".checklist").each(function() {
+    //         if ($(this).is(":checked")) {
+    //             alert($(this).attr("cid"));
+    //             obj.push($(this).attr("data-cid"));
+    //         }
+    //     });
+    //     alert(obj)
+    // });
+            
+    // document.querySelector("#DDL")
+    //     .addEventListener('click', () => {
+    //         window.location.href = "/news/scraping";
+    //     });
+
+</script>
+
+{% endblock scripts %}

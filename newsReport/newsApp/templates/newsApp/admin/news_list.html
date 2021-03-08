@@ -1,0 +1,94 @@
+{% extends "newsApp/base.html" %}
+
+{% load static %}
+
+{% block title %}News List{% endblock %}
+
+{% block content %}
+  
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">News List</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <div id="jsGrid1">
+            <table class="table table-boderless">
+                <thead class="border-bottom font-weight-bold">
+                    <tr>
+                        <td>News Title</td>
+                        <td>News Category</td>
+                        <td>News Description</td>
+                        <td>News Channel</td>
+                        <td>
+                            <a href="{% url 'news_insert' %}" class="btn btn-outline-success">
+                                <i class="fa fa-plus-square-o" aria-hidden="true"> Add New</i>
+                            </a>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for newsDetails in news_list %}
+            
+                    <tr>
+                        <td>{{ newsDetails.newsTitle }}</td>
+                        <td>{{ newsDetails.newsCategory }}</td>
+                        <td>{{ newsDetails.newsDescription | safe}}</td>
+                        <td>{{ newsDetails.newsChannel }}</td>
+                        <td>
+                            <a href="{% url 'news_update' newsDetails.id %}" class="btn btn-success">
+                                <i class="fa fa-pen" aria-hidden="true"></i>
+                            </a>
+                            
+                                <button class="btn btn-danger delete-button" cid="{{newsDetails.id}}">
+                                    <i class="fa fa-trash float-right" aria-hidden="true"></i>
+                                </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    $('.delete-button').click(function(){
+      var id = $(this).attr("cid");
+      swal({
+  title: "Are you sure?",
+  text: "Once deleted, you will not be able to recover this file!",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    $.ajax({
+        type: "POST",
+        url: "{% url 'news_delete' %}",
+        data: {'id':id, csrfmiddlewaretoken:"{{ csrf_token }}"}, 
+        success: function(data)
+        {
+            swal("Your file has been deleted!", {
+                icon: "success",
+            }).then(function(){
+                window.location.reload();
+            }); 
+            
+        },
+        error: function(data)
+        {        
+            swal("Oh no!", "Server Error", "error");  
+            swal.stopLoading();
+            swal.close();                                                       
+        }
+    });
+  }
+});
+    });
+  </script>
+{% endblock scripts %}

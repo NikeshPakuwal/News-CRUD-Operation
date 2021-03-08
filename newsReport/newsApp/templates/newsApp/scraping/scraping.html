@@ -1,0 +1,104 @@
+{% extends 'newsApp/base.html' %}
+
+{% block title %}Web Scraping{% endblock %}
+
+{% block content %}
+<div class="row">
+    <form action="{% url 'scraping' %}" method= "POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-10">
+                <input type="text" class="form-control" name="url" required="">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-md btn-primary" type="submit">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+.table td, .table th{
+    word-break: break-all;
+}
+</style>
+
+<br>
+<div class="card">
+    <div id="card-body">
+        <div class="table-responsive">
+            <table class="table table-boderless">
+                <thead class="border-bottom font-weight-bold">
+                    <tr>
+                        <td>URL</td>
+                        <td>Title</td>
+                        <td style="width: 400px;">Content</td>
+                        <td>Created At</td>
+                        <td>Updated At</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in list %}
+            
+                    <tr>
+                        <td>{{ s.url }}</td>
+                        <td>{{ s.title }}</td>
+                        <td>{{ s.content }}</td>
+                        <td>{{ s.created_at }}</td>
+                        <td>{{ s.updated_at }}</td>
+                        <td>
+                            <button class="btn btn-danger delete-btn" cid="{{s.id}}">
+                                <i class="fa fa-trash float-right" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+
+<script>
+    $('.delete-btn').click(function(){
+      var id = $(this).attr("cid");
+      swal({
+  title: "Are you sure?",
+  text: "Once deleted, you will not be able to recover this file!",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    $.ajax({
+        type: "POST",
+        url: "{% url 'deleteScraping' %}",
+        data: {'id':id,csrfmiddlewaretoken:"{{ csrf_token }}"}, 
+        success: function(data)
+        {
+            swal("Your  file has been deleted!", {
+                icon: "success",
+            }).then(function(){
+                window.location.reload();
+            }); 
+            
+        },
+        error: function(data)
+        {        
+            swal("Oh no!", "Server Error", "error");  
+            swal.stopLoading();
+            swal.close();                                                       
+        }
+    });
+  }
+});
+    });
+  </script>
+
+{% endblock scripts %}

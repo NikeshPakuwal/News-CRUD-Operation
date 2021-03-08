@@ -1,0 +1,46 @@
+{% extends "newsApp/base.html"%}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Add Category{% endblock %}
+
+{% block content %}
+
+<div class="card card-default">
+    <div class="card-header">
+      <h3 class="card-title">Add News Category</h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+          <i class="fas fa-minus"></i>
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+        <form action=""  method="POST" autocomplete="off">
+            {% csrf_token %}
+            <div class="row align-items-end">
+                <div class="col-md-4">
+                    {{ cat.title | as_crispy_field }}
+                </div>
+                <div class="col-md-2">
+                    <label style="margin-bottom:17px">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fa fa-plus" aria-hidden="true"></i> Add New</button>
+                    </label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-2">
+        <br><br><a href="{% url 'news_category_list' %}" class="btn btn-secondary btn-block btn-sm">
+            <i class="fa fa-bars" aria-hidden="true"></i> Back to List
+        </a>
+    </div>
+
+    <!-- /.card-body -->
+    <div class="card-footer">
+      
+    </div>
+</div>
+
+{% endblock content %}

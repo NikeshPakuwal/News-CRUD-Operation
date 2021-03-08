@@ -1,0 +1,28 @@
+{% extends 'newsApp/base.html' %}
+
+{% block content %}
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Upload Semrush CSV file ...</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <form method="POST" role="form" enctype="multipart/form-data"> 
+                  {% csrf_token %}
+                  <input type="file" name="PostAdd">
+                  <button type="submit">Upload</button>
+              </form>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+{% endblock content %}
